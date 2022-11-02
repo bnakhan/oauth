@@ -1,18 +1,19 @@
 package com.oauth.payload;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 public class RegisterRequest {
 
-    @NotEmpty(message = "name must not be empty")
+    @NotBlank
     private String name;
 
-    @NotEmpty(message = "email must not be empty")
+    @NotBlank
     @Email
     private String email;
 
-    @NotEmpty(message = "password must not be empty")
+    @NotBlank
     private String password;
 
     public String getName() {

@@ -1,7 +1,6 @@
 package com.oauth.controller;
 
 
-import com.oauth.annotation.CustomRestController;
 import com.oauth.exception.BadRequestException;
 import com.oauth.model.AuthProvider;
 import com.oauth.model.User;
@@ -18,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +28,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/auth/")
-@Validated
 public class AuthController {
 
         @Autowired
@@ -46,7 +43,7 @@ public class AuthController {
         private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -61,9 +58,9 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
-        if(userRepo.existsByEmail(request.getEmail())) {
+        if(Boolean.TRUE.equals(userRepo.existsByEmail(request.getEmail()))) {
             throw new BadRequestException("Email address already in use.");
         }
 
